@@ -27,7 +27,7 @@ func debugRequest(request *http.Request) {
 }
 
 func sendAuthRequiredHeaders(responseWriter http.ResponseWriter) {
-    responseWriter.Header().Set("WWW-Authenticate","Basic realm=\"My Realm\"")
+    responseWriter.Header().Set("WWW-Authenticate","Basic realm=\"Composer\"")
     responseWriter.WriteHeader(http.StatusUnauthorized)
 }
 
@@ -63,27 +63,13 @@ func processRequest(responseWriter http.ResponseWriter, request *http.Request) {
     debugRequest(request);
 }
 
-func processRequest2(responseWriter http.ResponseWriter, request *http.Request) {
-    //http.FileServer(http.Dir("./static")).ServeHTTP(responseWriter, request)
-}
- 
-func main() {
-	//http.HandleFunc("/", processRequest2)
-	
-	http.HandleFunc("/", processRequest)
-	http.ListenAndServe(":8000", nil)
-	
-    //http.Handle("/", http.FileServer(http.Dir("./static")))
-    //http.ListenAndServe(":3000", nil)	
-	
+func processLoginRequest(responseWriter http.ResponseWriter, request *http.Request) {
+    //sendAuthRequiredHeaders(responseWriter)
+    io.WriteString(responseWriter, "Implement Me")
 }
 
-//    http.Handle(
-//        "/static/", 
-//        http.StripPrefix(
-//            "/static/", 
-//            http.FileServer(
-//                http.Dir("./public")
-//            )
-//        )
-//    );
+func main() {
+	http.HandleFunc("/", processRequest)
+	http.HandleFunc("/login", processLoginRequest)
+	http.ListenAndServe(":8000", nil)	
+}
