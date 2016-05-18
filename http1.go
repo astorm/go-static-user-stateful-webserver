@@ -4,8 +4,8 @@ import (
 	"io"
 	"net/http"
 	"fmt"
-	"strings"
-	"encoding/base64"
+//	"strings"
+//	"encoding/base64"
 )
 
 func parseUsernameAndPasswordFromAuthHeader(request *http.Request) map[string]string {
@@ -13,34 +13,17 @@ func parseUsernameAndPasswordFromAuthHeader(request *http.Request) map[string]st
     usernameAndPassword = make(map[string]string)
     usernameAndPassword["username"] = ""
     usernameAndPassword["password"] = ""    
-    authHeader := request.Header.Get("Authorization")    
-    fields  := strings.Fields(authHeader)    
-    if len(fields) == 0 {
+    username, password, ok := request.BasicAuth()
+    if(ok == false){
         return usernameAndPassword
     }    
-    //authType        := fields[0];
-    authBase64      := fields[1];    
-    decoded, err    := base64.StdEncoding.DecodeString(authBase64)
-    if err != nil {
-        fmt.Println("decode error:", err)
-        return usernameAndPassword
-    }
-    decodedString   := string(decoded)
-    parts           := strings.Split(decodedString, ":")
-    usernameAndPassword["username"] = parts[0]
-    passwordParts   := make([]string, len(parts) -1)
-    for index, element := range parts{ 
-        if index != 0{
-            passwordParts = append(passwordParts, element)
-        }
-    }
-    usernameAndPassword["password"] = strings.Join(passwordParts,"")
-    return usernameAndPassword
+    usernameAndPassword["username"] = username
+    usernameAndPassword["password"] = password    
+    return usernameAndPassword;
 }
 
 func debugRequest(request *http.Request) {
-    usernameAndPassword := parseUsernameAndPasswordFromAuthHeader(request);
-    fmt.Printf("%+v\n",usernameAndPassword);
+    fmt.Printf("%+v\n", request.URL);
 }
 
 func sendAuthRequiredHeaders(responseWriter http.ResponseWriter) {
