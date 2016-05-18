@@ -13,3 +13,5 @@ Follow along as I make really dumb beginner experiments and mistakes with go.
 - OK, using `request.BasicAuth` now.
 
 - Not sure about this line `http.FileServer(http.Dir(folder)).ServeHTTP(responseWriter, request)` -- I'm basically doing the job of the handler function manually.  If the handler interface ever changes, I'm in trouble. 
+
+- About to start playing around with packaging stuff.  File renames ahead.

@@ -4,6 +4,8 @@ import (
 	"io"
 	"net/http"
 	"fmt"
+    _ "github.com/mattn/go-sqlite3"
+	
 //	"strings"
 //	"encoding/base64"
 )
