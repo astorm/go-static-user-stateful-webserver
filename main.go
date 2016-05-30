@@ -8,6 +8,9 @@ package main
 //TODO: unique index (sqlite equivalent?) on username in table
 //TODO: additional salt?
 //TODO: move application to package?
+//TODO: create a new user space
+//      - a packages.json (with an include?)
+//      - with list of avaiable packages
 import (
     //"fmt"
    "github.com/astorm/go-static-user-stateful-webserver/application"

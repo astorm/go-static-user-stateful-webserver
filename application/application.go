@@ -8,6 +8,8 @@ import (
 	"database/sql" 
 	"log"   
 	"golang.org/x/crypto/bcrypt"
+    "github.com/astorm/go-static-user-stateful-webserver/config"
+	
 )
 
 func parseUsernameAndPasswordFromAuthHeader(request *http.Request) map[string]string {
@@ -38,7 +40,8 @@ func writeBodyBodyUnauthorizedRequest(responseWriter http.ResponseWriter) {
 }
 
 func authenticateUsenameAndPassword(usernameAndPassword map[string]string) bool {
-	db, err := sql.Open("sqlite3", config("account-db"))
+	db, err := sql.Open("sqlite3", config.Get("account-db"))
+	fmt.Println(config.Get("account-db"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +83,7 @@ func processRequest(responseWriter http.ResponseWriter, request *http.Request) {
     
     if(authenticateUsenameAndPassword(usernameAndPassword)){
         //var folder = "./static/" + usernameAndPassword["username"]
-        var folder = config("webroot") + "/" + usernameAndPassword["username"]
+        var folder = config.Get("webroot") + "/" + usernameAndPassword["username"]
         fmt.Println(folder)
         http.FileServer(http.Dir(folder)).ServeHTTP(responseWriter, request)
         //io.WriteString(responseWriter, "Autehnticated!")
@@ -101,14 +104,14 @@ func processLoginRequest(responseWriter http.ResponseWriter, request *http.Reque
     io.WriteString(responseWriter, "Implement Me")
 }
 
-func generatePassword() {
-    pass        := "abc123"
+func GeneratePassword(pass string) []byte {
+    //pass        := "abc123"
     passBytes   := []byte(pass)
     var result, err = bcrypt.GenerateFromPassword(passBytes, bcrypt.DefaultCost)
     if err != nil {
       log.Fatal(err)
     }  
-    fmt.Printf("Hello %s\n", result);	    
+    return result
 }
 
 func TaskWebServer() {
@@ -120,13 +123,4 @@ func TaskWebServer() {
 func taskHelloGoodbye() {
     fmt.Printf("Hello %s\n", "world");	    
     fmt.Printf("Goodbye %s\n", "world");
-}
-
-func config(key string) string {
-    var config map[string]string    
-    config = make(map[string]string)
-    base := "/Users/alanstorm/go/src/github.com/astorm/go-static-user-stateful-webserver"
-    config["webroot"]    = base + "/static"
-    config["account-db"] = base + "/accounts.db"        
-    return config[key]
 }
