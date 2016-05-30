@@ -1,4 +1,4 @@
-package main
+package application
 
 import (
 	"io"
@@ -111,7 +111,7 @@ func generatePassword() {
     fmt.Printf("Hello %s\n", result);	    
 }
 
-func taskWebServer() {
+func TaskWebServer() {
    http.HandleFunc("/", processRequest)
    http.HandleFunc("/login", processLoginRequest)
    http.ListenAndServe(":8000", nil)	
@@ -120,4 +120,13 @@ func taskWebServer() {
 func taskHelloGoodbye() {
     fmt.Printf("Hello %s\n", "world");	    
     fmt.Printf("Goodbye %s\n", "world");
+}
+
+func config(key string) string {
+    var config map[string]string    
+    config = make(map[string]string)
+    base := "/Users/alanstorm/go/src/github.com/astorm/go-static-user-stateful-webserver"
+    config["webroot"]    = base + "/static"
+    config["account-db"] = base + "/accounts.db"        
+    return config[key]
 }

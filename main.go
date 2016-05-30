@@ -10,17 +10,10 @@ package main
 //TODO: move application to package?
 import (
     //"fmt"
+   "github.com/astorm/go-static-user-stateful-webserver/application"
 )
 
 func main() {
-    taskWebServer()
-}
-
-func config(key string) string {
-    var config map[string]string    
-    config = make(map[string]string)
-    base := "/Users/alanstorm/go/src/github.com/astorm/go-static-user-stateful-webserver"
-    config["webroot"]    = base + "/static"
-    config["account-db"] = base + "/accounts.db"        
-    return config[key]
+ //   type ConfigFunction func(string)
+    application.TaskWebServer()
 }
